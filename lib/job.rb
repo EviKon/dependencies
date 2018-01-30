@@ -1,3 +1,5 @@
+require 'circular_dependency_error'
+
 class Job
   attr_reader :string
   attr_reader :job
@@ -51,16 +53,14 @@ class Job
   end
 
   def check_circularity(v)
-    raise circular_error if get_new_value(v) == @first
+    if get_new_value(v) == @first
+      raise CircularDependancyError, "There can not be circular dependencies"
+    end
   end
 
   def get_new_value(v)
     hash.each do |key,value|
       return value if key == v
     end
-  end
-
-  def circular_error
-    "There can not be circular dependencies"
   end
 end

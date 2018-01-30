@@ -1,5 +1,6 @@
 require 'input'
 require 'job'
+require 'self_dependency_error'
 class Code
   attr_reader :input
   attr_reader :string
@@ -15,13 +16,9 @@ class Code
 
   def jobs
     hash.each do |k,v|
-      raise error if k == v
+      raise SelfDependencyError, "There can not be self dependencies" if k == v
       string.concat(Job.new(k, v, string, input).job)
     end
     string
-  end
-
-  def error
-    "There can not be self dependencies"
   end
 end
