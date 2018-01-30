@@ -53,9 +53,7 @@ class Job
   end
 
   def check_circularity(v)
-    if get_new_value(v) == @first
-      raise CircularDependancyError, "There can not be circular dependencies"
-    end
+    raise CircularDependancyError if get_new_value(v) == @first
   end
 
   def get_new_value(v)

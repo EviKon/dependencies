@@ -16,7 +16,7 @@ class Code
 
   def jobs
     hash.each do |k,v|
-      raise SelfDependencyError, "There can not be self dependencies" if k == v
+      raise SelfDependencyError if k == v
       string.concat(Job.new(k, v, string, input).job)
     end
     string
