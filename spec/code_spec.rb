@@ -20,7 +20,7 @@ RSpec.describe Code do
     end
 
     context '' do
-      let(:input) { 'a=>c,b=>d' }
+      let(:input) { 'a=>c,b=>d,c=> ,d=> ' }
 
       it 'returns the output with the values before the keys' do
         expect(subject).to eql('cadb')
@@ -47,7 +47,7 @@ RSpec.describe Code do
       let(:input) { 'a=> ,b=> ,c=>c' }
 
       it 'raises an error for self dependencies' do
-        expect{ subject }.to raise_error "There can not be self dependencies"
+        expect{ subject }.to raise_error SelfDependencyError
       end
     end
 
@@ -55,7 +55,7 @@ RSpec.describe Code do
       let(:input) { 'a=> ,b=>c,c=>f,d=>a,e=> ,f=>b' }
 
       it 'raises an error for circular dependencies' do
-        expect{ subject }.to raise_error "There can not be circular dependencies"
+        expect{ subject }.to raise_error(TSort::Cyclic)
       end
     end
   end

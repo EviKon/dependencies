@@ -1,6 +1,6 @@
 class Input
   attr_reader :hash
-  
+
   def initialize(input)
     array = input.split(',')
     @hash = get_hash(array)
@@ -15,6 +15,13 @@ class Input
     array.each do |x|
      new_array.push(x.split('=>'))
     end
-    new_array.to_h
+    final_hash(new_array.to_h)
+  end
+
+  def final_hash(new_hash)
+    new_hash.each do |k, v|
+        new_hash[k] = v.split
+    end
+    new_hash
   end
 end
