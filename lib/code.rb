@@ -1,7 +1,10 @@
+require 'tsort'
 require 'input'
-require 'job'
+require 'hash'
 require 'self_dependency_error'
-class Code
+class Code < Hash
+  include TSort
+
   attr_reader :input
   attr_reader :string
 
@@ -11,14 +14,17 @@ class Code
   end
 
   def hash
-    hash ||= Input.convert(input).hash
+    Input.convert(input).hash
   end
 
   def jobs
-    hash.each do |k,v|
-      raise SelfDependencyError if k == v
-      string.concat(Job.new(k, v, string, input).job)
+    check_self_dependency
+    hash.tsort.join()
+  end
+
+  def check_self_dependency
+    hash.each do |k, v|
+      raise SelfDependencyError if k == v.join
     end
-    string
   end
 end
